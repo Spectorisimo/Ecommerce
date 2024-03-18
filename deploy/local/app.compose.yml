@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  ninja-postgres:
+    image: postgres:14
+    container_name: ninja-postgres
+    volumes:
+      - ninja_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - "3312:5432"
+
+  ninja-backend:
+    container_name: ninja-backend
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    command: "sh /entrypoint.sh"
+    depends_on:
+      - ninja-postgres
+    ports:
+      - "8060:8000"
+
+volumes:
+  ninja_postgres_data:

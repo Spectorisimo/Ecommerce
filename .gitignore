@@ -1,0 +1,9 @@
+.vscode/
+*.pyc
+backend/core/config/settings/local.py
+backend/core/static/*
+!static/.gitkeep
+*.sqlite*
+.venv/
+__pycache__/
+*.pytest_cache
