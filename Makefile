@@ -34,6 +34,9 @@ monitoring:
 monitoring-logs:
 	${DC} -f ${MONITORING_FILE} logs -f
 
+.PHONY: monitoring-down
+monitoring-down:
+	${DC} -f ${MONITORING_FILE} down
 
 
 
