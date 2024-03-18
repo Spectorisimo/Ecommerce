@@ -11,8 +11,11 @@ from core.apps.users.entities.users import User
 
 
 class ReviewRating(int, Enum):
-    LOWEST = 1
-    HIGHEST = 5
+    TERRIBLE = 1
+    POOR = 2
+    FAIR = 3
+    GOOD = 4
+    EXCELLENT = 5
 
 
 @dataclass
@@ -22,7 +25,7 @@ class Review:
     product: Product | EntityStatus = field(default=EntityStatus.NOT_LOADED)
 
     text: str = field(default='')
-    rating: ReviewRating = field(default=ReviewRating.LOWEST)
+    rating: ReviewRating = field(default=ReviewRating.TERRIBLE)
 
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime | None = field(default=None)

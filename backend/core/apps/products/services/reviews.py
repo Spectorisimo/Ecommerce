@@ -42,7 +42,7 @@ class IReviewValidatorService(ABC):
 
 class ReviewRatingValidatorService(IReviewValidatorService):
     def validate(self, review: ReviewEntity) -> None:
-        if not (ReviewRating.LOWEST <= review.rating <= ReviewRating.HIGHEST):
+        if not (ReviewRating.TERRIBLE <= review.rating <= ReviewRating.EXCELLENT):
             raise ReviewInvalidRating(rating=review.rating)
 
 
