@@ -7,3 +7,4 @@ backend/core/static/*
 .venv/
 __pycache__/
 *.pytest_cache
+.idea/
