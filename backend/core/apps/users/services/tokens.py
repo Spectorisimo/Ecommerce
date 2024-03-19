@@ -33,7 +33,7 @@ from core.apps.users.repositories.tokens import ITokenRepository
 class ITokenService(ABC):
 
     @abstractmethod
-    def save_token(self, refresh_token: TokenEntity) -> TokenEntity: ...
+    def save_token(self, refresh_token: TokenEntity) -> None: ...
 
     @abstractmethod
     def revoke_token(self, jti: str) -> None: ...
@@ -46,7 +46,7 @@ class ITokenService(ABC):
 class TokenService(ITokenService):
     token_repository: ITokenRepository
 
-    def save_token(self, refresh_token: TokenEntity) -> TokenEntity:
+    def save_token(self, refresh_token: TokenEntity) -> None:
         return self.token_repository.save_token(refresh_token=refresh_token)
 
     def revoke_token(self, jti: str) -> None:

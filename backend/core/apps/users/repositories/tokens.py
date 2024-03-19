@@ -9,7 +9,7 @@ from core.apps.users.models.tokens import IssuedToken
 
 class ITokenRepository(ABC):
     @abstractmethod
-    def save_token(self, refresh_token: TokenEntity) -> TokenEntity: ...
+    def save_token(self, refresh_token: TokenEntity) -> None: ...
 
     @abstractmethod
     def revoke_token(self, jti: str) -> None: ...
@@ -20,10 +20,9 @@ class ITokenRepository(ABC):
 
 class TokenRepository(ITokenRepository):
 
-    def save_token(self, refresh_token: TokenEntity) -> TokenEntity:
+    def save_token(self, refresh_token: TokenEntity) -> None:
         token_dto = IssuedToken.from_entity(refresh_token=refresh_token)
         token_dto.save()
-        return refresh_token
 
     def revoke_token(self, jti: str) -> None:
         IssuedToken.objects.filter(jti=jti).update(is_revoked=True)
