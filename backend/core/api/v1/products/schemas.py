@@ -14,8 +14,8 @@ class ProductSchema(BaseModel):
     created_at: datetime
     updated_at: datetime | None = None
 
-    @staticmethod
-    def from_entity(product: ProductEntity) -> 'ProductSchema':
+    @classmethod
+    def from_entity(cls, product: ProductEntity) -> 'ProductSchema':
         return ProductSchema(
             id=product.id,
             title=product.title,
