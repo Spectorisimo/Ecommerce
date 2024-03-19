@@ -28,11 +28,6 @@ from core.apps.users.exceptions.tokens import (
 )
 
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
-ALGORITHM = "HS256"
-
-
 class ITokenizerService(ABC):
 
     @abstractmethod
@@ -48,16 +43,16 @@ class ITokenizerService(ABC):
 class TokenizerService(ITokenizerService):
 
     def create_access_token(self, user: User) -> str:
-        expires_at = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expires_at = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         return self._encode_token(token_type=TokenType.ACCESS, exp=expires_at, sub=user.email)
 
     def create_refresh_token(self, user: User) -> str:
-        expires_at = datetime.utcnow() + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
+        expires_at = datetime.utcnow() + timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES)
         return self._encode_token(token_type=TokenType.REFRESH, exp=expires_at, sub=user.email)
 
     def decode_token(self, token: str) -> TokenPayload:
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         except JWTError:
             raise IncorrectTokenValueException(token=token)
         else:
@@ -67,7 +62,7 @@ class TokenizerService(ITokenizerService):
     def _encode_token(self, token_type: TokenType, exp: datetime, sub: str) -> str:
         jti = self._generate_jti()
         to_encode = {"exp": exp, "sub": sub, "jti": jti, "token_type": token_type}
-        encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, ALGORITHM)
+        encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, settings.ALGORITHM)
         return encoded_jwt
 
     @staticmethod
