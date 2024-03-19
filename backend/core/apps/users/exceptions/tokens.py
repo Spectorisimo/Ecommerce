@@ -4,6 +4,15 @@ from core.apps.common.exceptions import ServiceException
 
 
 @dataclass(eq=False)
+class IncorrectTokenValueException(ServiceException):
+    token: str
+
+    @property
+    def message(self):
+        return f'Given incorrect value of token {self.token}'
+
+
+@dataclass(eq=False)
 class TokenExpiredException(ServiceException):
 
     @property

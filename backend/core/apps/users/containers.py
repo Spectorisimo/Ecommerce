@@ -7,8 +7,12 @@ from core.apps.users.repositories.users import (
     UserRepository,
 )
 from core.apps.users.services.tokens import (
+    ComposedTokenValidatorService,
     ITokenizerService,
+    ITokenValidatorService,
+    TokenExpiryValidatorService,
     TokenizerService,
+    TokenTypeValidatorService,
 )
 from core.apps.users.services.users import (
     IUserService,
@@ -28,12 +32,24 @@ def _initialize_container() -> punq.Container:
     container = punq.Container()
 
     container.register(IUserRepository, UserRepository)
-    container.register(IUserService, UserService)
 
+    container.register(IUserService, UserService)
     container.register(ITokenizerService, TokenizerService)
 
-    container.register(AuthenticateUseCase)
+    container.register(TokenTypeValidatorService)
+    container.register(TokenExpiryValidatorService)
 
+    def build_validators() -> ITokenValidatorService:
+        return ComposedTokenValidatorService(
+            validators=[
+                container.resolve(TokenTypeValidatorService),
+                container.resolve(TokenExpiryValidatorService),
+            ],
+        )
+
+    container.register(ITokenValidatorService, factory=build_validators)
+
+    container.register(AuthenticateUseCase)
     container.register(GetTokenPairUseCase)
     container.register(RefreshTokenUseCase)
 
