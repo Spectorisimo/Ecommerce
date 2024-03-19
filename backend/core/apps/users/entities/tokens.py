@@ -1,6 +1,6 @@
+from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
-
-from pydantic import BaseModel
 
 
 class TokenType(str, Enum):
@@ -8,13 +8,15 @@ class TokenType(str, Enum):
     REFRESH = 'REFRESH'
 
 
-class TokenPayload(BaseModel):
-    sub: str
-    exp: int
+@dataclass
+class Token:
+    subject_id: str
     token_type: TokenType
     jti: str
+    expires_at: datetime
 
 
-class TokenPair(BaseModel):
+@dataclass
+class TokenPair:
     access_token: str
     refresh_token: str

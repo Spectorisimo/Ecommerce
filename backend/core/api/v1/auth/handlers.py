@@ -19,6 +19,7 @@ from core.apps.users.exceptions.users import (
 from core.apps.users.use_cases.auth.authenticate import AuthenticateUseCase
 from core.apps.users.use_cases.tokens.get import GetTokenPairUseCase
 from core.apps.users.use_cases.tokens.refresh import RefreshTokenUseCase
+from core.apps.users.use_cases.tokens.revoke import RevokeTokenUseCase
 
 
 router = Router(tags=['Authorization'])
@@ -64,3 +65,16 @@ def refresh(request: HttpRequest, refresh_token: str):
         raise HttpError(status_code=HTTPStatus.BAD_REQUEST, message=e.message)
 
     return ApiResponse(data=TokenOutSchema.from_entity(tokens))
+
+
+@router.post('revoke/', response={HTTPStatus.OK: ApiResponse})
+def revoke(request: HttpRequest, refresh_token: str):
+    container = get_container()
+    use_case: RevokeTokenUseCase = container.resolve(RevokeTokenUseCase)
+
+    try:
+        use_case.execute(refresh_token)
+    except ServiceException as e:
+        raise HttpError(status_code=HTTPStatus.BAD_REQUEST, message=e.message)
+
+    return ApiResponse(data=None)

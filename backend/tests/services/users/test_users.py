@@ -12,6 +12,6 @@ class UserServiceTest:
         expected_count = 1
         user = UserModelFactory.create_batch(size=expected_count)[0]
 
-        fetched_user = user_service.get_user_by_email(user.email)
+        fetched_user = user_service.get_user_by_id(user.id)
 
-        assert user.email == fetched_user.email, f'{user.email}'
+        assert user.email == fetched_user.email, f'{user.id}'

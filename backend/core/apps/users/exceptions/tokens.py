@@ -27,3 +27,11 @@ class TokenIncorrectTypeException(ServiceException):
     @property
     def message(self):
         return f"Given token's type is not {self.needed_type}"
+
+
+@dataclass(eq=False)
+class TokenRevokedException(ServiceException):
+
+    @property
+    def message(self):
+        return 'Given token has been revoked and can not be used'

@@ -2,6 +2,7 @@ from abc import (
     ABC,
     abstractmethod,
 )
+from dataclasses import dataclass
 
 from django.contrib.auth.hashers import check_password
 
@@ -13,6 +14,9 @@ from core.apps.users.repositories.users import IUserRepository
 class IUserService(ABC):
 
     @abstractmethod
+    def get_user_by_id(self, user_id: str) -> User: ...
+
+    @abstractmethod
     def get_user_by_email(self, email: str) -> User: ...
 
     @staticmethod
@@ -20,13 +24,15 @@ class IUserService(ABC):
     def compare_passwords(given_password: str, user_password: str) -> None: ...
 
 
+@dataclass
 class UserService(IUserService):
+    user_repository: IUserRepository
 
-    def __init__(self, user_repository: IUserRepository):
-        self.user_repository = user_repository
+    def get_user_by_id(self, user_id: str) -> User:
+        return self.user_repository.get_user_by_id(user_id)
 
     def get_user_by_email(self, email: str) -> User:
-        return self.user_repository.get_by_email(email)
+        return self.user_repository.get_user_by_email(email)
 
     @staticmethod
     def compare_passwords(given_password: str, user_password: str) -> None:

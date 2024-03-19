@@ -18,10 +18,10 @@ class RefreshTokenUseCase:
     token_validator_service: ITokenValidatorService
 
     def execute(self, refresh_token: str) -> TokenPair:
-        token_payload = self.tokenizer.decode_token(token=refresh_token)
-        self.token_validator_service.validate(token_payload=token_payload, token_type=TokenType.REFRESH)
+        token = self.tokenizer.decode_token(encoded_token=refresh_token)
+        self.token_validator_service.validate(token=token, token_type=TokenType.REFRESH)
 
-        user = self.user_service.get_user_by_email(token_payload.sub)
+        user = self.user_service.get_user_by_id(user_id=token.subject_id)
         access_token = self.tokenizer.create_access_token(user)
         refresh_token = self.tokenizer.create_refresh_token(user)
         return TokenPair(access_token=access_token, refresh_token=refresh_token)

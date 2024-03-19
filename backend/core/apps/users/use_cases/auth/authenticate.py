@@ -16,7 +16,7 @@ class AuthenticateUseCase:
     token_validator_service: ITokenValidatorService
 
     def execute(self, access_token: str) -> User:
-        token_payload = self.tokenizer.decode_token(token=access_token)
-        self.token_validator_service.validate(token_payload=token_payload, token_type=TokenType.ACCESS)
-        user = self.user_service.get_user_by_email(token_payload.sub)
+        token = self.tokenizer.decode_token(encoded_token=access_token)
+        self.token_validator_service.validate(token=token, token_type=TokenType.ACCESS)
+        user = self.user_service.get_user_by_id(user_id=token.subject_id)
         return user

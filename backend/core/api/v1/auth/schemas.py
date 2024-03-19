@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from core.apps.users.entities.tokens import TokenPair as TokensEntity
+from core.apps.users.entities.tokens import TokenPair
 
 
 class CredentialSchema(BaseModel):
@@ -12,6 +12,9 @@ class TokenOutSchema(BaseModel):
     access_token: str
     refresh_token: str
 
-    @staticmethod
-    def from_entity(entity: TokensEntity) -> 'TokenOutSchema':
-        return TokenOutSchema(**entity.dict())
+    @classmethod
+    def from_entity(cls, token_pair: TokenPair) -> 'TokenOutSchema':
+        return cls(
+            access_token=token_pair.access_token,
+            refresh_token=token_pair.refresh_token,
+        )

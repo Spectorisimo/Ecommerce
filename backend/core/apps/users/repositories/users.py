@@ -11,13 +11,20 @@ from core.apps.users.models.users import CustomUser as UserModel
 class IUserRepository(ABC):
 
     @abstractmethod
-    def get_by_email(self, email: str) -> User: ...
+    def get_user_by_id(self, user_id: str) -> User: ...
+
+    @abstractmethod
+    def get_user_by_email(self, email: str) -> User: ...
 
 
 class UserRepository(IUserRepository):
 
-    def get_by_email(self, email: str) -> User:
-        user = UserModel.objects.filter(email=email)
-        if not user:
+    def get_user_by_id(self, user_id: str) -> User:
+        user_dto = UserModel.objects.get(id=user_id)
+        return user_dto
+
+    def get_user_by_email(self, email: str) -> User:
+        user_dto = UserModel.objects.filter(email=email)
+        if not user_dto:
             raise UserNotFoundException(email)
-        return user.first().to_entity()
+        return user_dto.first().to_entity()
