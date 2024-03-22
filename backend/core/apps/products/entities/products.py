@@ -3,6 +3,7 @@ from dataclasses import (
     field,
 )
 from datetime import datetime
+from decimal import Decimal
 
 
 @dataclass
@@ -12,6 +13,7 @@ class Product:
     title: str
     description: str
     additional_data: dict
+    amount: Decimal
     is_active: bool = field(default=True)
 
     created_at: datetime = field(default_factory=datetime.utcnow)

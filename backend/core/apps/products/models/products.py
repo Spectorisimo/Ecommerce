@@ -9,6 +9,7 @@ class Product(BaseDateTimeModel):
     title = models.CharField(max_length=255, verbose_name=_('Title'))
     description = models.TextField(blank=True, verbose_name=_('Description'))
     additional_data = models.JSONField(default=dict, verbose_name=_('Additional data'))
+    amount = models.DecimalField(max_digits=14, decimal_places=2, verbose_name=('Amount'))
     is_active = models.BooleanField(default=True, verbose_name=_('Is active'))
 
     @classmethod
@@ -18,6 +19,7 @@ class Product(BaseDateTimeModel):
             title=product.title,
             description=product.description,
             additional_data=product.additional_data,
+            amount=product.amount,
             is_active=product.is_active,
         )
 
@@ -27,6 +29,7 @@ class Product(BaseDateTimeModel):
             title=self.title,
             description=self.description,
             additional_data=self.additional_data,
+            amount=self.amount,
             is_active=self.is_active,
             created_at=self.created_at,
             updated_at=self.updated_at,
