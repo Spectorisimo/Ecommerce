@@ -44,7 +44,6 @@ DJANGO_APPS = [
 MY_APPS = [
     'core.apps.products',
     'core.apps.users',
-    'core.apps.orders',
 ]
 
 THIRD_APPS = [
