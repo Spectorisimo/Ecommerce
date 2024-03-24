@@ -2,6 +2,7 @@ from abc import (
     ABC,
     abstractmethod,
 )
+from typing import Iterable
 
 from django.db.models import Q
 
@@ -22,6 +23,9 @@ class IProductRepository(ABC):
 
     @abstractmethod
     def get_product_list(self, pagination: PaginationIn, filters: ProductFilters) -> list[ProductEntity]: ...
+
+    @abstractmethod
+    def get_all_products(self) -> Iterable[ProductEntity]: ...
 
     @abstractmethod
     def get_product_count(self, filters: ProductFilters) -> int: ...
@@ -48,6 +52,13 @@ class ProductRepository(IProductRepository):
     def get_product_count(self, filters: ProductFilters) -> int:
         query = self._build_product_query(filters)
         return Product.objects.filter(query).count()
+
+    def get_all_products(self) -> Iterable[ProductEntity]:
+        query = self._build_product_query(ProductFilters())
+        products = Product.objects.filter(query)
+
+        for product in products:
+            yield product.to_entity()
 
     def _build_product_query(self, filters: ProductFilters) -> Q:
         query = Q(is_active=True)

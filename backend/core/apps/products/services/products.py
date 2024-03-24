@@ -3,6 +3,7 @@ from abc import (
     abstractmethod,
 )
 from dataclasses import dataclass
+from typing import Iterable
 
 from core.api.filters import PaginationIn
 from core.apps.products.entities.products import Product as ProductEntity
@@ -21,6 +22,9 @@ class IProductServices(ABC):
     def get_product_list(self, pagination: PaginationIn, filters: ProductFilters) -> list[ProductEntity]: ...
 
     @abstractmethod
+    def get_all_products(self) -> Iterable[ProductEntity]: ...
+
+    @abstractmethod
     def get_product_count(self, filters: ProductFilters) -> int: ...
 
 
@@ -36,6 +40,9 @@ class ProductServices(IProductServices):
 
     def get_product_list(self, pagination: PaginationIn, filters: ProductFilters) -> list[ProductEntity]:
         return self.product_repository.get_product_list(pagination=pagination, filters=filters)
+
+    def get_all_products(self) -> Iterable[ProductEntity]:
+        return self.product_repository.get_all_products()
 
     def get_product_count(self, filters: ProductFilters) -> int:
         return self.product_repository.get_product_count(filters=filters)

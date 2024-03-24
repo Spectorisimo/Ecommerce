@@ -1,6 +1,6 @@
-from _decimal import Decimal
 from datetime import datetime
 
+from _decimal import Decimal
 from pydantic import BaseModel
 
 from core.apps.products.entities.products import Product as ProductEntity
@@ -13,6 +13,7 @@ class ProductSchema(BaseModel):
     additional_data: dict
     amount: Decimal
     is_active: bool
+    tags: list[str]
     created_at: datetime
     updated_at: datetime | None = None
 
@@ -24,6 +25,7 @@ class ProductSchema(BaseModel):
             description=product.description,
             additional_data=product.additional_data,
             amount=product.amount,
+            tags=product.tags,
             is_active=product.is_active,
             created_at=product.created_at,
             updated_at=product.updated_at,
@@ -36,6 +38,7 @@ class CreateProductSchema(BaseModel):
     additional_data: dict
     amount: Decimal
     is_active: bool
+    tags: list[str]
 
     @staticmethod
     def from_entity(product: ProductEntity) -> 'ProductSchema':
@@ -45,6 +48,7 @@ class CreateProductSchema(BaseModel):
             description=product.description,
             additional_data=product.additional_data,
             amount=product.amount,
+            tags=product.tags,
             is_active=product.is_active,
             created_at=product.created_at,
             updated_at=product.updated_at,
@@ -56,5 +60,6 @@ class CreateProductSchema(BaseModel):
             description=self.description,
             additional_data=self.additional_data,
             amount=self.amount,
+            tags=self.tags,
             is_active=self.is_active,
         )

@@ -44,6 +44,7 @@ DJANGO_APPS = [
 MY_APPS = [
     'core.apps.products',
     'core.apps.users',
+    'core.apps.orders',
 ]
 
 THIRD_APPS = [
@@ -184,3 +185,6 @@ LOGGING = {
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 ALGORITHM = "HS256"
+
+ELASTIC_URL = env('ELASTIC_URL')
+ELASTIC_PRODUCT_INDEX = env('ELASTIC_PRODUCT_INDEX', default='product_index')

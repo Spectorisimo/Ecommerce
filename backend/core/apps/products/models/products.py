@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -11,6 +12,7 @@ class Product(BaseDateTimeModel):
     additional_data = models.JSONField(default=dict, verbose_name=_('Additional data'))
     amount = models.DecimalField(max_digits=14, decimal_places=2, verbose_name=('Amount'))
     is_active = models.BooleanField(default=True, verbose_name=_('Is active'))
+    tags = ArrayField(verbose_name='Product tags', default=list, base_field=models.CharField(max_length=100))
 
     @classmethod
     def from_entity(cls, product: ProductEntity) -> 'Product':
@@ -20,6 +22,7 @@ class Product(BaseDateTimeModel):
             description=product.description,
             additional_data=product.additional_data,
             amount=product.amount,
+            tags=product.tags,
             is_active=product.is_active,
         )
 
@@ -30,6 +33,7 @@ class Product(BaseDateTimeModel):
             description=self.description,
             additional_data=self.additional_data,
             amount=self.amount,
+            tags=self.tags,
             is_active=self.is_active,
             created_at=self.created_at,
             updated_at=self.updated_at,
